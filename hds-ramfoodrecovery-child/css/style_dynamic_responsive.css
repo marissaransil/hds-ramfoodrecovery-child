@@ -1,0 +1,110 @@
+
+@media only screen and (max-width: 1000px){
+	
+		.header_bottom {
+		background-color: #004c23;
+	}
+				.header_bottom,
+		nav.mobile_menu{
+				background-color: #004c23 !important;
+		}
+		
+	 		.subtitle{
+			font-size: 16px;
+		}
+	 			.title h1,
+		.title h1.title_like_separator .vc_text_separator.full .separator_content{
+			font-size:40px;			
+		}
+					.title h1,
+		.title h1.title_like_separator .vc_text_separator.full .separator_content{
+			font-size:40px;
+		}
+		
+		
+			.content h2{
+			font-size:60px;
+		}
+				.content h2{
+			font-size:52.5px;
+		}
+				.content h3{
+			font-size:32px;
+		}
+				
+			
+					
+	
+	}
+
+@media only screen and (min-width: 600px) and (max-width: 768px){
+			.title h1,
+		.title h1.title_like_separator .vc_text_separator.full .separator_content{
+			font-size:35px;
+		}
+				.title h1,
+		.title h1.title_like_separator .vc_text_separator.full .separator_content{
+			font-size:30px;
+		}
+				.content h2{
+			font-size:45px;
+		}
+				.content h3{
+			font-size:24px;
+		}
+					
+			.subtitle{
+			font-size: 14px;
+		}
+	 }
+
+@media only screen and (min-width: 480px) and (max-width: 768px){
+	        section.parallax_section_holder{
+		height: auto !important;
+		min-height: 400px !important;
+	}
+		
+	}
+
+@media only screen and (max-width: 600px){
+			.title h1,
+		.title h1.title_like_separator .vc_text_separator.full .separator_content{
+			font-size:25px;
+		}
+				.title h1,
+		.title h1.title_like_separator .vc_text_separator.full .separator_content{
+			font-size:25px;
+		}
+					.content h2{
+				font-size:37.5px;
+			}
+				.content h3{
+			font-size:20px;
+		}
+					
+	}
+
+@media only screen and (max-width: 480px){
+
+				.title h1,
+			.title h1.title_like_separator .vc_text_separator.full .separator_content{
+				font-size:20px;
+			}
+				.title h1,
+		.title h1.title_like_separator .vc_text_separator.full .separator_content{
+			font-size:20px;
+		}
+					.content h2{
+				font-size:30px;
+			}
+				.content h3{
+			font-size:16px;
+		}
+						
+		section.parallax_section_holder{
+		height: auto !important;
+		min-height: 400px !important;
+	}
+		
+	
+	}
