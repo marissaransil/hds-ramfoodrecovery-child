@@ -1,0 +1,11 @@
+Removed /wp-content/themes/hds/js/default.min.js from JS files to exclude from minification.  Not sure why I had this there, but if things stop working put it back. :)
+Ditto with /wp-content/themes/hds-child/style.css 
+* UNCHECKED COMBINE JS.  GETTING WEIRD ISSUES WITH IE (BRANDLOGO UNDEFINED) AS REPORTED FROM JEFF MORRELL AND ALAN FENN.  ALSO VIDEO DOESN'T WORK
+* UNCHECKED OPTIMIZE CSS DELIVERY - DOESN'T WORK IN EDGE  (the moving title on sub-pages doesn't work)
+* BASICALLY DON'T CHECK MORE THAN THE TOP 4 ITEMS
+
+OTHER NOTES:
+
+Every time that WordPress is upgraded, you will need to update the labels to say eName and ePassword at line 474 of /wp-includes/general-template.php
+You cannot check the box to lazyload iframes and videos, as this will necessitate users pressing the back button twice when navigating between halls/explore page
+For banner photos on individual pages, upload files that are 2500x600.  2500 sounds quite large, and it is, but if you use 1920x600, the resulting image will be too tall
