@@ -1,0 +1,188 @@
+<?php
+	 // uncomment the following to run this testing tool directly: https://ramfoodrecovery.colostate.edu/wp-content/themes/hds-ramfoodrecovery-child/PageTextTest.php?v=1
+	 //require_once('../../../wp-load.php');
+
+	 
+
+	/*************************
+		    BASE VARS
+	*************************/
+	//$phone = '1' . preg_replace( '/\D+/', '', rgar($entry, '7') ); // Strip phone number formatting, prepend "1"
+	$phone = '19706904544';
+	$programId = 'd2b67be0-79a2-49dd-9476-7c793fdc3297';
+	$programIdentifier = '6ymXUTPfyNG6pBjd';
+	$programKey = 'vUfprLLcKJ6MFBFuCntvLCsHB53xusCp';
+	$api_url = 'https://wsnet2.colostate.edu/cwis463/smshub/api';
+	$auth_tkn = '';
+	
+	$log_file = 'zoinks.txt';
+	date_default_timezone_set('America/Denver');
+
+
+	/*************************
+		  AUTHORIZATION
+	*************************/
+	// echo $log_file . '<br>';
+	echo '<b>Start Timestamp:</b> ' . date('Y-m-d H:i:s') . '<br>';
+	echo '<b>Starting attempt loop...</b><br>';
+	$auths = 0;
+	for($i = 0; $i < 2; $i++) {
+		//try {
+
+			$auth_url = '';
+			$auth_body = '';
+			$auth_response = '';
+			$auth_tkn = '';
+
+			// Build request
+			$auth_url = $api_url . '/Login';
+			$auth_body = array(
+				'ProgramSID' => $programIdentifier,
+				'ProgramKey' => $programKey
+				);
+
+			// Send request and get response
+			$auth_response = wp_remote_post( $auth_url, array(
+				'method' => 'POST',
+				'body' => $auth_body,
+				'timeout' => 15
+				)
+			);
+			
+			// If no error
+			if( !is_wp_error( $auth_response ) ) {
+
+				// Set auth token (and strip wrapping quotes)
+				$auth_tkn = trim($auth_response['body'], '"');
+
+				echo($auth_tkn);
+
+				// Flag as successful to exit while loop
+				$auth_success = true;
+
+			}
+			else { // there is an error
+
+				// Get error code
+				$error_code = $auth_response->get_error_code();
+
+				echo($error_code);
+
+				// If error was timeout
+				if( $error_code == 'http_request_failed' ) {
+
+					// Log error
+					log_sms('Event Submission - API authorization request timed out (code 824)');
+
+					// Display error
+					//echo 'API authorization request timed out. Please contact <a href="mailto:dsa_web@colostate.edu">DSA Web</a> and provide the error code 824.';
+				}
+
+				// If error was anything else
+				else {
+					// Log error
+					log_sms('Event Submission - API authorization request errored but did was not timed out (code 835)');
+
+					// Display error
+					// echo 'API authorization request errored but did was not timed out. Please contact <a href="mailto:dsa_web@colostate.edu">DSA Web</a> and provide the error code 835.';
+				}
+			}
+
+
+		//} catch(Exception $e) {
+		//	echo 'Exception caught authorizing API request. Please contact <a href="mailto:dsa_web@colostate.edu">DSA Web</a> and provide the error code 900.';
+		//}
+	}
+
+	echo '<b>Attempt loop completed</b><br>';
+	echo '<b>Authorization successful ' . $auths . '/10 times.</b>';
+
+
+
+	/*************************
+      REMOVE PREV DUPLICATES
+	*************************/
+	// try {
+	// 	// Get duplicates (based on [formatted] phone number)
+	// 	$form_id			= '16';
+	// 	$search_criteria['field_filters'][] = array( 'key' => '7', 'value' => rgar($entry, '7'));
+	// 	$sorting			= array();
+	// 	$paging				= array( 'offset' => 0, 'page_size' => 1000 );
+	// 	$total_count		= 0;
+	// 	$dups 				= GFAPI::get_entries( $form_id, $search_criteria, $sorting, $paging, $total_count );
+
+	// 	// Loop through duplicates
+	// 	foreach( $dups as $dup ) {
+
+	// 		// If not current entry
+	// 		if($dup['id'] != $entry['id']) {
+ 
+	// 			// Delete the duplicate entries
+	// 			GFAPI::delete_entry($dup['id']);
+
+	// 		}
+	// 	}
+	// } catch(Exception $e) {
+	// 	echo 'Exception caught while registering your entry. Please contact <a href="mailto:dsa_web@colostate.edu">DSA Web</a> and provide the error code 928.';
+	// }
+
+
+	/*************************
+		MARK AS SUBSCRIBER
+	*************************/
+	// try {
+	// 	// Request params
+	// 	$sub_url = $api_url . '/Subscribers';
+	// 	$sub_headers = array(
+	// 		'Content-type' => 'application/json',
+	// 		'Authorization' => $auth_tkn
+	// 	);
+	// 	$sub_body = array(
+	// 		'ProgramId' => $programId,
+	// 		'PhoneNumber' => $phone,
+	// 		'DoNotText' => false
+	// 	);
+
+	// 	// Request post
+	// 	$sub_response = wp_remote_post( $sub_url, array(
+	// 		'method' => 'POST',
+	// 		'data-format' => 'body',
+	// 		'headers' => $sub_headers,
+	// 		'body' => json_encode($sub_body)
+	// 		)
+	// 	);
+	// } catch(Exception $e) {
+	// 	echo 'Exception caught while registering your entry. Please contact <a href="mailto:dsa_web@colostate.edu">DSA Web</a> and provide the error code 957.';
+	// }
+
+
+	/*************************
+		SEND INITIAL SMS
+	*************************/
+	// try {
+	// 	// Request params
+	// 	$sms_url = $api_url . '/TextMessages';
+	// 	$sms_headers = array(
+	// 		'Content-type' => 'application/json',
+	// 		'Authorization' => $auth_tkn
+	// 	);
+	// 	$sms_body = array(
+	// 		'ProgramId' => $programId,
+	// 		'PhoneNumber' => $phone,
+	// 		'Message' => 'Thank you for subscribing for Ram Food Recovery text notifications. Reply STOP at any time to unsubscribe.',
+	// 		'DateSent' => current_time('mysql')
+	// 	);
+
+	// 	// Request post
+	// 	$sms_response = wp_remote_post( $sms_url, array(
+	// 		'method' => 'POST',
+	// 		'data-format' => 'body',
+	// 		'headers' => $sms_headers,
+	// 		'body' => json_encode($sms_body)
+	// 		)
+	// 	);
+	// } catch(Exception $e) {
+	// 	echo 'Exception caught while registering your entry. Please contact <a href="mailto:dsa_web@colostate.edu">DSA Web</a> and provide the error code 987.';
+	// }
+
+?>
